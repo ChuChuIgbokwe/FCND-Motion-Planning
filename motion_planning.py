@@ -4,6 +4,8 @@ import msgpack
 from enum import Enum, auto
 
 import numpy as np
+import csv
+
 
 from planning_utils import a_star, heuristic, create_grid
 from udacidrone import Drone
@@ -120,13 +122,16 @@ class MotionPlanning(Drone):
         self.target_position[2] = TARGET_ALTITUDE
 
         # TODO: read lat0, lon0 from colliders into floating point values
-        #lat0, lon0 = 
+        file = open('colliders.csv', 'r')
+        reader = csv.reader(file)
+        header = reader.next()
+        lat0, lon0 = [float(header[i].split()[1]) for i, j in enumerate(header)]
         # TODO: set home position to (lon0, lat0, 0)
-
+        self.global_home = (lon0, lat0, 0)
         # TODO: retrieve current global position
- 
+        self.global_position = self
         # TODO: convert to current local position using global_to_local()
-        
+        self.local_position = global_to_local(self.global_position, self.global_home)
         print('global home {0}, position {1}, local position {2}'.format(self.global_home, self.global_position,
                                                                          self.local_position))
         # Read in obstacle map
