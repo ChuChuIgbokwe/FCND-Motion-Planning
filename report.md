@@ -1,31 +1,32 @@
 ## Project: 3D Motion Planning
 
-# Required Steps for a Passing Submission:
+My solution involves the following steps
 1. Load the 2.5D map in the colliders.csv file describing the environment.
 2. Discretize the environment into a grid or graph representation.
 3. Define the start and goal locations.
 4. Perform a search using A* or other search algorithm.
 5. Use a collinearity test or ray tracing method (like Bresenham) to remove unnecessary waypoints.
 6. Return waypoints in local ECEF coordinates (format for `self.all_waypoints` is [N, E, altitude, heading], where the drone’s start location corresponds to [0, 0, 0, 0].
-7. Write it up.
-8. Congratulations!  Your Done!
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
----
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
-
-You're reading it! Below I describe how I addressed each rubric point and where in my code each point is handled.
 
 ### Explain the Starter Code
 
 #### 1. Explain the functionality of what's provided in `motion_planning.py` and `planning_utils.py`
-These scripts contain a basic planning implementation that includes...
-the significant difference betwen 
+
 ##### `motion_planning.py`
-This script is almost identical to the backyard_flyer_solution.py script. The significant difference is the `plan_path` method.
-In this method the grid is defined and the waypoints along the shortest obstacle free path the drone will have to follow to get to the goal is calculated. This data is sent to the simulator for visualization
+It is an event driven programming script that handles how the drone receives commands and transitions to various states to accomplish the given commands. The drone  has the following states:
+* Manual
+* Arming
+* Takeoff
+* Waypoint
+* Landing
+* Disarming
+* Planning
+
+The transition between the states are called in three callback functions, `local_position_callback`, `velocity_callback` and `state_callback`
+The motion_planning.py script is almost identical to the backyard_flyer_solution.py script. The significant difference is the `plan_path` method and the Planning State.
+In the `plan_path` method the grid is defined and the waypoints along the shortest obstacle free path the drone will have to follow to get to the goal is calculated. This data is sent to the simulator for visualization
+
+
 ##### `planning_utils.py`
 * `create_grid` function:
 it creates a 2.5D configuration space where ones are obstacles and zeros are free space. Obstacles below the drone_altitude are marked as free space. Obstacles are also made bigger than they are by padding them with the safety_distance.
